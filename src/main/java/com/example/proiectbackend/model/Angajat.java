@@ -1,14 +1,12 @@
 package com.example.proiectbackend.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.example.proiectbackend.utils.FunctieEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Entity
@@ -21,18 +19,27 @@ public class Angajat {
     private Integer angajatID;
     private String nume;
     private String prenume;
-    private String functie;
-    private double salariu;
-    private LocalDate dataAngajare;
 
+    @Column(name = "functie")
+    @Enumerated(EnumType.STRING)
+    private FunctieEnum functie;
+    private double salariu;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate dataAngajare;
     private String email;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="proiectID")
-    @JsonIgnore
     Proiect proiect;
 
     //getter pentru a returna id-ul proiectului
     public Integer getProiectID() {
         return proiect != null ? proiect.getProiectID() : null;
     }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof Angajat;
+    }
+
 }

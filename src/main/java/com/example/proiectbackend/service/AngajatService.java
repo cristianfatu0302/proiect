@@ -1,7 +1,10 @@
 package com.example.proiectbackend.service;
 
 import com.example.proiectbackend.model.Angajat;
+import com.example.proiectbackend.model.Proiect;
 import com.example.proiectbackend.repository.AngajatRepository;
+import com.example.proiectbackend.repository.ProiectRepository;
+import com.example.proiectbackend.utils.FunctieEnum;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,13 +13,25 @@ import java.util.List;
 public class AngajatService {
 
     private final AngajatRepository angajatRepository;
+    private final ProiectRepository proiectRepository;
 
-    public AngajatService(AngajatRepository angajatRepository) {
+    public AngajatService(AngajatRepository angajatRepository, ProiectRepository proiectRepository) {
         this.angajatRepository = angajatRepository;
+        this.proiectRepository = proiectRepository;
     }
 
     public Angajat addAngajat(Angajat angajat){
         return angajatRepository.save(angajat);
+    }
+
+    public void setProiectForAngajat(Integer angajatID, Integer proiectID){
+        Angajat angajat = angajatRepository.findById(angajatID)
+                .orElseThrow(() -> new IllegalArgumentException("Angajatul cu id-ul" +  angajatID +"  nu exista in baza de date"));
+        Proiect proiect = proiectRepository.findById(proiectID)
+                .orElseThrow(() -> new IllegalArgumentException("Proiectul cu id-ul" + proiectID + "nu exista in baza de date"));
+
+        angajat.setProiect(proiect);
+        angajatRepository.save(angajat);
     }
 
     public Angajat getAngajat(Integer id){
@@ -42,7 +57,7 @@ public class AngajatService {
                 angajatToUpdate.setSalariu(Double.parseDouble(valoareCamp));
                 break;
             case "functie":
-                angajatToUpdate.setFunctie(valoareCamp);
+                angajatToUpdate.setFunctie(FunctieEnum.valueOf(valoareCamp));
                 break;
             case "email":
                 angajatToUpdate.setEmail(valoareCamp);

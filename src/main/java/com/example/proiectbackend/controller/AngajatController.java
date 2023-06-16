@@ -1,6 +1,7 @@
 package com.example.proiectbackend.controller;
 
 import com.example.proiectbackend.model.Angajat;
+import com.example.proiectbackend.model.AngajatRequestBody;
 import com.example.proiectbackend.service.AngajatService;
 import com.example.proiectbackend.service.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@CrossOrigin(origins ="http://localhost:3000")
 @RequestMapping("/angajati")
 public class AngajatController {
     private final AngajatService angajatService;
@@ -22,11 +24,16 @@ public class AngajatController {
     }
     //POST
     @PostMapping("/add")
-    public ResponseEntity<Angajat> addAngajat(@RequestBody Angajat angajat){
+    public ResponseEntity<Angajat> addAngajat(@RequestBody AngajatRequestBody angajatRequestBody){
+        Integer proiectID = angajatRequestBody.getProiectID();
+        Angajat angajat = angajatRequestBody.getAngajat();
+
         Angajat angajat1 = angajatService.addAngajat(angajat);
         if(angajat1 == null){
             return ResponseEntity.noContent().build();
         }
+
+        angajatService.setProiectForAngajat(angajat1.getAngajatID(), proiectID);
 
         return ResponseEntity.ok(angajat1);
     }
@@ -54,6 +61,6 @@ public class AngajatController {
     @DeleteMapping("delete/{id}")
     public ResponseEntity<String> deleteAngajatById(@PathVariable("id")Integer id){
         angajatService.deleteAngajatById(id);
-        return ResponseEntity.ok("Angajatul a fost sters cu succes.");
+        return ResponseEntity.ok("Angajatul cu id-ul " +id+ " a fost sters cu succes.");
     }
 }
