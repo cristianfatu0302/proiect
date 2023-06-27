@@ -1,6 +1,8 @@
 package com.example.proiectbackend.service;
 
+import com.example.proiectbackend.model.Angajat;
 import com.example.proiectbackend.model.Proiect;
+import com.example.proiectbackend.repository.AngajatRepository;
 import com.example.proiectbackend.repository.ProiectRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,11 @@ import java.util.List;
 public class ProiectService {
 
     private ProiectRepository proiectRepository;
-
+    private AngajatRepository angajatRepository;
     @Autowired
-    public ProiectService(ProiectRepository proiectRepository){
+    public ProiectService(ProiectRepository proiectRepository, AngajatRepository angajatRepository){
         this.proiectRepository = proiectRepository;
+        this.angajatRepository = angajatRepository;
     }
 
     public List<Proiect> getAllProjects(){
@@ -32,6 +35,14 @@ public class ProiectService {
     }
 
     public void deleteProjectByID(Integer id){
+        List<Angajat> angajati = angajatRepository.findAll();
+
+        for(Angajat angajat : angajati){
+            if(angajat.getProiectID() == id){
+                angajat.setProiect(null);
+            }
+        }
+
         proiectRepository.deleteById(id);
     }
 

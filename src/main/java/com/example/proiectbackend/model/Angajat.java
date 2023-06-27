@@ -3,6 +3,7 @@ package com.example.proiectbackend.model;
 import com.example.proiectbackend.utils.FunctieEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,8 @@ public class Angajat {
     Proiect proiect;
 
     //getter pentru a returna id-ul proiectului
+    @JsonProperty(value = "proiectID")
+    @JsonIgnore
     public Integer getProiectID() {
         return proiect != null ? proiect.getProiectID() : null;
     }

@@ -1,13 +1,13 @@
 package com.example.proiectbackend.controller;
 
 import com.example.proiectbackend.model.Angajat;
-import com.example.proiectbackend.model.AngajatRequestBody;
+import com.example.proiectbackend.model.Proiect;
 import com.example.proiectbackend.service.AngajatService;
+import com.example.proiectbackend.service.ProiectService;
 import com.example.proiectbackend.service.ResourceNotFoundException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,24 +19,20 @@ import java.util.List;
 public class AngajatController {
     private final AngajatService angajatService;
 
+    @Autowired
     public AngajatController(AngajatService angajatService){
         this.angajatService = angajatService;
+
     }
     //POST
     @PostMapping("/add")
-    public ResponseEntity<Angajat> addAngajat(@RequestBody AngajatRequestBody angajatRequestBody){
-        Integer proiectID = angajatRequestBody.getProiectID();
-        Angajat angajat = angajatRequestBody.getAngajat();
+    public ResponseEntity<Angajat> addAngajat(@RequestBody Angajat angajat) {
+       Angajat angajat1 = angajatService.addAngajat(angajat);
 
-        Angajat angajat1 = angajatService.addAngajat(angajat);
-        if(angajat1 == null){
-            return ResponseEntity.noContent().build();
-        }
-
-        angajatService.setProiectForAngajat(angajat1.getAngajatID(), proiectID);
-
-        return ResponseEntity.ok(angajat1);
+       return ResponseEntity.ok(angajat1);
     }
+
+
     //GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<Angajat> getAngajat(@PathVariable Integer id){
