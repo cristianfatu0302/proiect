@@ -26,7 +26,7 @@ public class Angajat {
     private FunctieEnum functie;
     private double salariu;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataAngajare;
     private String email;
     @JsonIgnore
@@ -34,13 +34,15 @@ public class Angajat {
     @JoinColumn(name="proiectID")
     Proiect proiect;
 
-    //getter pentru a returna id-ul proiectului
-    @JsonProperty(value = "proiectID")
-    @JsonIgnore
-    public Integer getProiectID() {
-        return proiect != null ? proiect.getProiectID() : null;
-    }
+    @JsonProperty
+    @Column(insertable=false, updatable=false)
+    Integer proiectID;
 
+
+    @JsonIgnore
+    public Integer getProiectId(){ return this.proiectID;}
+
+    public void setProiectId(Integer proiectID){this.proiectID = proiectID;}
     protected boolean canEqual(final Object other) {
         return other instanceof Angajat;
     }

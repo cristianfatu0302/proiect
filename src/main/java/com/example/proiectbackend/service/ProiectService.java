@@ -38,7 +38,7 @@ public class ProiectService {
         List<Angajat> angajati = angajatRepository.findAll();
 
         for(Angajat angajat : angajati){
-            if(angajat.getProiectID() == id){
+            if(angajat.getProiectId() == id){
                 angajat.setProiect(null);
             }
         }

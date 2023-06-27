@@ -17,7 +17,7 @@ import java.util.List;
 @CrossOrigin(origins ="http://localhost:3000")
 @RequestMapping("/angajati")
 public class AngajatController {
-    private final AngajatService angajatService;
+    private  AngajatService angajatService;
 
     @Autowired
     public AngajatController(AngajatService angajatService){
